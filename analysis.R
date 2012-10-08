@@ -17,12 +17,16 @@ for (station in stations$id){
     inBikes <- trips[trips$end_station_id==station]
     inBikes <- inBikes[!is.na(inBikes$endTime),]
 
-    frame <- data.frame(time=c(outBikes$startTime,inBikes$endTime),
-                     bikes=c(rep(-1,nrow(outBikes)),rep(1,nrow(inBikes))))
+    frame <- data.frame(time=c(outBikes$startTime,
+                               inBikes$endTime),
+                        bikes=c(rep(-1,nrow(outBikes)),
+                                rep(1,nrow(inBikes))))
 
     frame <- frame[order(frame$time),]
 
-    b <- data.frame(station=station, time=frame$time, bikes=cumsum(frame$bikes))
+    b <- data.frame(station=station,
+                    time=frame$time,
+                    bikes=cumsum(frame$bikes))
 
     b <- aggregate(b$bikes,
                    by=list(format(b$time,"%H"),
